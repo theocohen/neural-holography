@@ -66,7 +66,7 @@ elif 'UNET' in run_id.upper():
 image_res = (1080, 1920)
 roi_res = (880, 1600)  # regions of interest (to penalize)
 dtype = torch.float32  # default datatype (Note: the result may be slightly different if you use float64, etc.)
-device = torch.device('cuda')  # The gpu you are using
+device = torch.device('cpu')  # The gpu you are using
 
 # You can pre-compute kernels for fast-computation
 precomputed_H = [None] * 3

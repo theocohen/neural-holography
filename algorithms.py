@@ -58,7 +58,8 @@ def gerchberg_saxton(init_phase, target_amp, num_iters, prop_dist, wavelength, f
 
         # write to tensorboard / write phase image
         # Note that it takes 0.~ s for writing it to tensorboard
-        if False:#k > 0 and k % 10 == 0:
+        if k > 0 and k % 10 == 0:
+            print(k)
             utils.write_gs_summary(slm_field, recon_field, target_amp, k, writer, prefix='test')
 
         # replace amplitude at the image plane
@@ -126,7 +127,6 @@ def stochastic_gradient_descent(init_phase, target_amp, num_iters, prop_dist, wa
 
     # run the iterative algorithm
     for k in range(num_iters):
-        print(k)
         optimizer.zero_grad()
         # forward propagation from the SLM plane to the target plane
         real, imag = utils.polar_to_rect(torch.ones_like(slm_phase), slm_phase)
@@ -160,6 +160,7 @@ def stochastic_gradient_descent(init_phase, target_amp, num_iters, prop_dist, wa
         # Note that it takes 0.~ s for writing it to tensorboard
         with torch.no_grad():
             if k % 50 == 0:
+                print(k)
                 utils.write_sgd_summary(slm_phase, out_amp, target_amp, k,
                                         writer=writer, path=phase_path, s=s, prefix='test')
 

@@ -50,7 +50,7 @@ p.add_argument('--generator_dir', type=str, default='./pretrained_networks',
 p.add_argument('--prop_model_dir', type=str, default='./calibrated_models',
                help='Directory for the CITL-calibrated wave propagation models')
 p.add_argument('--citl', type=utils.str2bool, default=False, help='Use of Camera-in-the-loop optimization with SGD')
-p.add_argument('--experiment', type=str, default='', help='Name of experiment')
+p.add_argument('--experiment', type=str, default='', help='Name of experiment')  # use
 p.add_argument('--lr', type=float, default=8e-3, help='Learning rate for phase variables (for SGD)')
 p.add_argument('--lr_s', type=float, default=2e-3, help='Learning rate for learnable scale (for SGD)')
 p.add_argument('--num_iters', type=int, default=500, help='Number of iterations (GS, SGD)')
@@ -77,14 +77,14 @@ slm_res = (1080, 1920)  # resolution of SLM
 image_res = (1080, 1920)
 roi_res = (880, 1600)  # regions of interest (to penalize for SGD)
 dtype = torch.float32  # default datatype (Note: the result may be slightly different if you use float64, etc.)
-device = torch.device('cuda')  # The gpu you are using
+device = torch.device('cpu')  # The gpu you are using
 
 # Options for the algorithm
 loss = nn.MSELoss().to(device)  # loss functions to use (try other loss functions!)
 s0 = 1.0  # initial scale
 
 root_path = os.path.join(opt.root_path, run_id, chan_str)  # path for saving out optimized phases
-
+print(root_path)
 # Tensorboard writer
 summaries_dir = os.path.join(root_path, 'summaries')
 utils.cond_mkdir(summaries_dir)
@@ -137,7 +137,7 @@ elif opt.method == 'UNET':
 if 'NET' in opt.method:
     checkpoint = torch.load(model_path)
     phase_only_algorithm.load_state_dict(checkpoint)
-    phase_only_algorithm.eval()
+    phase_only_algorithm.eval()  # sets training to false in torch module
 
 
 # Augmented image loader (if you want to shuffle, augment dataset, put options accordingly.)
